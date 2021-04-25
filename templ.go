@@ -40,20 +40,25 @@ func main() {
 	}
 
 	c := formatter.SystemColors()
+	table := formatter.NewTable(os.Stdout)
+
 	funcs := template.FuncMap{
 		"green":  c.Green,
 		"red":    c.Red,
 		"yellow": c.Yellow,
 
+		"tableRow": table.TableRow,
+		"endTable": table.EndTable,
+
 		"truncate": formatter.Truncate,
 	}
 
-	t, err := template.New("main").Funcs(funcs).Parse(`{{range .}}{{with .Books}}{{template "table" .}}{{end}}{{end}}`)
+	t, err := template.New("main").Funcs(funcs).Parse(`{{range .}}{{with .Books}}{{template "table" .}}{{end}}{{end}}{{endTable}}`)
 	if err != nil {
 		log.Fatalf("failed to compile %s template: %s", "table", err)
 	}
 
-	t, err = t.New("table").Parse(`{{range .}}{{truncate .Title 32 | printf "%-32s" | green}} {{.ISBN13}}{{"\n"}}{{end}}`)
+	t, err = t.New("table").Parse(`{{range .}}{{tableRow (truncate .Title 30 | green) (.ISBN13 | yellow)}}{{end}}`)
 	if err != nil {
 		log.Fatalf("failed to compile %s template: %s", "main", err)
 	}
