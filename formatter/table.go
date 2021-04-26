@@ -12,7 +12,7 @@ type Table struct {
 
 func NewTable(output io.Writer) Table {
 	return Table{
-		w: tabwriter.NewWriter(output, 10, 1, 3, ' ', 0),
+		w: tabwriter.NewWriter(output, 10, 1, 1, ' ', 0),
 	}
 }
 
