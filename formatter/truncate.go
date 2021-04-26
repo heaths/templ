@@ -1,8 +1,13 @@
 package formatter
 
-func Truncate(text string, length uint) string {
-	if len(text) > int(length) {
-		return text[:length-3] + "..."
+import (
+	"unicode/utf8"
+)
+
+func Truncate(text string, length int) string {
+	const ellipsis string = "…"
+	if utf8.RuneCountInString(text) > length {
+		return text[:length-1] + ellipsis
 	}
 
 	return text
