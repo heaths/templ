@@ -1,11 +1,11 @@
-package main
+package catalog
 
 import (
-	"log"
-	"os"
+	"fmt"
+	"io"
 	"text/template"
 
-	"github.com/heaths/templ/formatter"
+	"github.com/heaths/templ/pkg/formatter"
 )
 
 type Book struct {
@@ -18,8 +18,8 @@ type Author struct {
 	Books []Book
 }
 
-func main() {
-	homes := []Author{
+func New() []Author {
+	return []Author{
 		{
 			Name: "Stephen King",
 			Books: []Book{
@@ -38,9 +38,11 @@ func main() {
 			},
 		},
 	}
+}
 
+func Format(authors []Author, output io.Writer) error {
 	c := formatter.SystemColors()
-	table := formatter.NewTable(os.Stdout)
+	table := formatter.NewTable(output)
 
 	funcs := template.FuncMap{
 		"green":  c.Green,
@@ -55,16 +57,18 @@ func main() {
 
 	t, err := template.New("main").Funcs(funcs).Parse(`{{range .}}{{with .Books}}{{template "table" .}}{{end}}{{end}}{{endTable}}`)
 	if err != nil {
-		log.Fatalf("failed to compile %s template: %s", "table", err)
+		return fmt.Errorf("failed to compile %s template: %s", "table", err)
 	}
 
 	t, err = t.New("table").Parse(`{{range .}}{{tableRow (truncate .Title 30 | green) (.ISBN13 | yellow)}}{{end}}`)
 	if err != nil {
-		log.Fatalf("failed to compile %s template: %s", "main", err)
+		return fmt.Errorf("failed to compile %s template: %s", "main", err)
 	}
 
-	err = t.ExecuteTemplate(os.Stdout, "main", homes)
+	err = t.ExecuteTemplate(output, "main", authors)
 	if err != nil {
-		log.Fatalf("failed to execute template: %s", err)
+		return fmt.Errorf("failed to execute template: %s", err)
 	}
+
+	return nil
 }
