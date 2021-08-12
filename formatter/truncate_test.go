@@ -8,7 +8,7 @@ func TestTruncate(t *testing.T) {
 	tests := []struct {
 		name   string
 		text   string
-		length uint
+		length int
 		want   string
 	}{
 		{name: "raw", text: "onetwo", length: 6, want: "onetwo"},

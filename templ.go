@@ -23,10 +23,10 @@ func main() {
 		{
 			Name: "Stephen King",
 			Books: []Book{
-				{Title: `Misery: A Novel\n`, ISBN13: "978-1501143106"},
-				{Title: `Salem\\'s Lot`, ISBN13: "978-0345806796"},
-				{Title: `The Dark Tower I:\b The Gunslinger`, ISBN13: "978-1501143519"},
-				{Title: `The Dark Tower II:\tThe Drawing of the Three`, ISBN13: "978-1501143533"},
+				{Title: `Misery: A Novel`, ISBN13: "978-1501143106"},
+				{Title: `Salem's Lot`, ISBN13: "978-0345806796"},
+				{Title: `The Dark Tower I: The Gunslinger`, ISBN13: "978-1501143519"},
+				{Title: `The Dark Tower II: The Drawing of the Three`, ISBN13: "978-1501143533"},
 			},
 		},
 		{
